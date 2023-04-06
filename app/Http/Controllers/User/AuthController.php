@@ -31,6 +31,7 @@ class AuthController extends Controller
         try {
             // create user
             $user = User::create($request->validated());
+            $user->assignRole('User');
 
             // send otp to email
             $otp = self::createOTP();

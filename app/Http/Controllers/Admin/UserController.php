@@ -7,10 +7,16 @@ use App\Models\Otp;
 use App\Models\PermohonanRegistrasi;
 use Illuminate\Http\Request;
 use App\Http\Resources\Admin\PermohonanRegistrasiResource;
-
+use App\Models\User;
+use App\Http\Requests\User\UserUpdateRequest;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Admin','permission:verifikasi-users|delete-users']);
+    }
+
     public function permohonanRegistrasi()
     {
         // get user by verifikasi otp
@@ -46,6 +52,25 @@ class UserController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Gagal verifikasi akun'
+            ]);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            // get user by id
+            $user = User::find($id);
+            $user->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil hapus akun'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal hapus akun'
             ]);
         }
     }

@@ -7,11 +7,11 @@ use App\Models\KapalIkan;
 use App\Models\User;
 use App\Http\Requests\User\UserUpdateRequest;
 
-class ProfileController extends Controller
+class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['role:User|Admin','permission:edit-users']);
+        $this->middleware(['role:User|Admin','permission:edit-users'], ['only' => ['update']]);
     }
 
     public function profile()
@@ -35,6 +35,26 @@ class ProfileController extends Controller
             'status' => true,
             'message' => 'Berhasil mendapatkan data user',
             'data' => $user
+        ]);
+    }
+
+    public function update(UserUpdateRequest $request, $id)
+    {
+        $user = User::find($id);
+
+        if($user) {
+            $user->update($request->validated());
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil mengubah data user',
+                'data' => $user
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Gagal mengubah data user'
         ]);
     }
 }

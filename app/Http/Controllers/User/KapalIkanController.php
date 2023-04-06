@@ -9,6 +9,11 @@ use App\Models\KapalIkan;
 
 class KapalIkanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:User','permission:create-kapal|edit-kapal']);
+    }
+
     public function store(PendaftaranKapalIkanRequest $request)
     {
         try {
@@ -52,6 +57,13 @@ class KapalIkanController extends Controller
             
             $kapalIkan = KapalIkan::find($id);
 
+            if(!$kapalIkan) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+
             if($request->hasFile('foto_kapal')) {
                 // upload foto kapal
                 $file_foto_kapal = $request->file('foto_kapal');
@@ -78,16 +90,6 @@ class KapalIkanController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Berhasil mengupdate kapal ikan'
-        ]);
-    }
-
-    public function delete($id)
-    {
-        KapalIkan::where('id', $id)->delete();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Berhasil menghapus kapal ikan'
         ]);
     }
 }

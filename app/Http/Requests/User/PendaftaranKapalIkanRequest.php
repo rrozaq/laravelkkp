@@ -31,6 +31,7 @@ class PendaftaranKapalIkanRequest extends FormRequest
             'ukuran_kapal' => 'required|int',
             'kapten' => 'required|string',
             'jumlah_anggota' => 'required|int',
+            'nomor_izin' => 'required|string',
             'foto_kapal' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'dokumen_perizinan' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];

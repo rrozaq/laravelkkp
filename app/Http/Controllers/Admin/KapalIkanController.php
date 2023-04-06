@@ -9,6 +9,11 @@ use App\Http\Resources\Admin\KapalIkanResource;
 
 class KapalIkanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Admin','permission:verifikasi-kapal|delete-kapal']);
+    }
+
     public function getkapalIkan()
     {
         // get kapal ikan status pending
@@ -49,6 +54,27 @@ class KapalIkanController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Gagal verifikasi akun'
+            ]);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            // get kapalIkan by id
+            $kapalIkan = KapalIkan::where('id', $id)->first();
+
+            // delete kapalIkan
+            $kapalIkan->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil menghapus data kapal ikan'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menghapus data kapal ikan'
             ]);
         }
     }

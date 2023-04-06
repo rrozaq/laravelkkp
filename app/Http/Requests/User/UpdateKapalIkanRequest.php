@@ -24,7 +24,6 @@ class UpdateKapalIkanRequest extends FormRequest
     public function rules()
     {
         return [
-            'kapal_id' => 'required|int',
             'kode_kapal' => 'required|string',
             'nama_kapal' => 'required|string',
             'nama_pemilik' => 'required|string',
